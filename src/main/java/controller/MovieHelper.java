@@ -7,17 +7,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import model.MovieItem;
+import model.Movie;
 
-/**
- * @author Shravan - spatel10
- * CIS175 - Fall 2021
- * Sep 30, 2021
- */
 public class MovieHelper {
 	static EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("MovieList");
 
-	public void insertMovie(MovieItem toInsert) {
+	public void insertMovie(Movie toInsert) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		em.persist(toInsert);
@@ -25,80 +20,81 @@ public class MovieHelper {
 		em.close();
 	}
 
-	public void deleteMovie(MovieItem toDelete) {
+	public void deleteMovie(Movie toDelete) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<MovieItem> typedQuery = em.createQuery("SELECT i FROM MovieItem i WHERE i.title = :selectedTitle",
-				MovieItem.class);
+		TypedQuery<Movie> typedQuery = em.createQuery("SELECT i FROM Movie i WHERE i.title = :selectedTitle",
+				Movie.class);
 		typedQuery.setParameter("selectedTitle", toDelete.getTitle());
 		typedQuery.setMaxResults(1);
 
-		MovieItem result = typedQuery.getSingleResult();
+		Movie result = typedQuery.getSingleResult();
 
 		em.remove(result);
 		em.getTransaction().commit();
 		em.close();
 	}
 
-	public List<MovieItem> showAllMovies() {
+	public List<Movie> showAllMovies() {
 		EntityManager em = emfactory.createEntityManager();
-		List<MovieItem> allItems = em.createQuery("SELECT i FROM MovieItem i").getResultList();
+		@SuppressWarnings("unchecked")
+		List<Movie> allItems = em.createQuery("SELECT i FROM Movie i").getResultList();
 		return allItems;
 	}
 
-	public List<MovieItem> searchForMovieByTitle(String titleName) {
+	public List<Movie> searchForMovieByTitle(String titleName) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<MovieItem> typedQuery = em.createQuery("SELECT i FROM MovieItem i WHERE i.title = :selectedTitle",
-				MovieItem.class);
+		TypedQuery<Movie> typedQuery = em.createQuery("SELECT i FROM Movie i WHERE i.title = :selectedTitle",
+				Movie.class);
 		typedQuery.setParameter("selectedTitle", titleName);
-		List<MovieItem> foundItems = typedQuery.getResultList();
+		List<Movie> foundItems = typedQuery.getResultList();
 		em.close();
 		return foundItems;
 	}
 
-	public List<MovieItem> searchForMovieByDirector(String directorName) {
+	public List<Movie> searchForMovieByDirector(String directorName) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<MovieItem> typedQuery = em
-				.createQuery("SELECT i FROM MovieItem i WHERE i.director = :selectedDirector", MovieItem.class);
+		TypedQuery<Movie> typedQuery = em
+				.createQuery("SELECT i FROM Movie i WHERE i.director = :selectedDirector", Movie.class);
 		typedQuery.setParameter("selectedDirector", directorName);
-		List<MovieItem> foundItems = typedQuery.getResultList();
+		List<Movie> foundItems = typedQuery.getResultList();
 		em.close();
 		return foundItems;
 	}
 
-	public List<MovieItem> searchForMovieByActor(String actorName) {
+	public List<Movie> searchForMovieByActor(String actorName) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<MovieItem> typedQuery = em
-				.createQuery("SELECT i FROM MovieItem i WHERE i.actor LIKE '%selectedActor%'", MovieItem.class);
+		TypedQuery<Movie> typedQuery = em
+				.createQuery("SELECT i FROM Movie i WHERE i.actor LIKE '%selectedActor%'", Movie.class);
 		typedQuery.setParameter("selectedActor", actorName);
-		List<MovieItem> foundItems = typedQuery.getResultList();
+		List<Movie> foundItems = typedQuery.getResultList();
 		em.close();
 		return foundItems;
 	}
 
-	public List<MovieItem> searchForMovieByGenre(String genreSelected) {
+	public List<Movie> searchForMovieByGenre(String genreSelected) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<MovieItem> typedQuery = em
-				.createQuery("SELECT i FROM MovieItem i WHERE i.genre LIKE '%selectedGenre%'", MovieItem.class);
+		TypedQuery<Movie> typedQuery = em
+				.createQuery("SELECT i FROM Movie i WHERE i.genre LIKE '%selectedGenre%'", Movie.class);
 		typedQuery.setParameter("selectedGenre", genreSelected);
-		List<MovieItem> foundItems = typedQuery.getResultList();
+		List<Movie> foundItems = typedQuery.getResultList();
 		em.close();
 		return foundItems;
 	}
 
-	public MovieItem searchForMovieById(int idToEdit) {
+	public Movie searchForMovieById(int idToEdit) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		MovieItem found = em.find(MovieItem.class, idToEdit);
+		Movie found = em.find(Movie.class, idToEdit);
 		em.close();
 		return found;
 	}
 
-	public void updateMovie(MovieItem toEdit) {
+	public void updateMovie(Movie toEdit) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		em.merge(toEdit);

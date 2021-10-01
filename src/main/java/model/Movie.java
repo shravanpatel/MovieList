@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,12 +14,12 @@ import lombok.Data;
 /**
  * @author Shravan - spatel10
  * CIS175 - Fall 2021
- * Sep 30, 2021
+ * Oct 1, 2021
  */
-@Data 
+@Data
 @Entity
 @Table(name = "movies")
-public class MovieItem {
+public class Movie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -32,12 +34,25 @@ public class MovieItem {
 	private String producer;
 	@Column(name = "actors")
 	private String actors;
+	@Column(name = "release_date")
+	private LocalDate releaseDate;
 
-	public MovieItem() {
+	public Movie() {
 		super();
 	}
 
-	public MovieItem(String title, String genre, String director, String producer, String actors) {
+	public Movie(String title, String genre, String director, String producer, String actors,
+			LocalDate releaseDate) {
+		super();
+		this.title = title;
+		this.genre = genre;
+		this.director = director;
+		this.producer = producer;
+		this.actors = actors;
+		this.releaseDate = releaseDate;
+	}
+	
+	public Movie(String title, String genre, String director, String producer, String actors) {
 		super();
 		this.title = title;
 		this.genre = genre;
@@ -45,8 +60,8 @@ public class MovieItem {
 		this.producer = producer;
 		this.actors = actors;
 	}
-
-	public MovieItem(String title) {
+	
+	public Movie(String title) {
 		super();
 		this.title = title;
 	}
